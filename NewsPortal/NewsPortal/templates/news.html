@@ -1,0 +1,31 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+
+{% block title %}
+{{ news.post_header }}
+{% endblock title %}
+
+
+{% block content %}
+<h2>{{ news.post_header|censor }}</h2>
+<hr>
+<small class="fw-bold">{{ news.post_add_time|date:'d M Y' }} </small>
+<small class="fw-bold">категории:
+    {% for category in news.post_category.all %}
+        <a href="{% url 'category_list' category.id %}">{{category}}</a>
+    {% endfor %}
+</small>
+<small class="text-muted">(автор: {{ news.author }})</small>
+<hr>
+<p class="text-start">{{ news.post_text|censor }}
+<hr>
+{% if perms.news.change_post %}
+    <a href="{% url 'news_edit' pk=news.id %}" class="btn-secondary btn-sm">Изменить</a>
+    {% endif %}
+    {% if perms.news.delete_post %}
+    <a href="{% url 'news_delete' news.id %}" class="btn-secondary btn-sm btn-danger">Удалить</a>
+{% endif %}
+<hr>
+{% endblock content %}
